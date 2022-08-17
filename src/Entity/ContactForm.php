@@ -19,15 +19,21 @@ class ContactForm
 
     /**
      * @Assert\NotBlank()
-     * @Assert\Email()
      */
     #[ORM\Column(length: 255,nullable: true)]
 
     private ?string $name = null;
+    /**
+     * @Assert\NotBlank()
+     * @Assert\Email()
+     */
 
     #[ORM\Column(length: 255,nullable: true)]
 
     private ?string $email = null;
+    /**
+     * @Assert\NotBlank()
+     */
 
     #[ORM\Column(type: Types::TEXT,nullable: true)]
     private ?string $messageText = null;
