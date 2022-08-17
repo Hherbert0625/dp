@@ -14,11 +14,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class ContactFormController extends AbstractController
 {
     /**
-     * @Route("/show")
+     * @Route("/index")
      */
 
-    public function show(Environment $twig, Request $request, EntityManagerInterface $entityManager)
+    public function index(Environment $twig, Request $request, EntityManagerInterface $entityManager)
     {
+
         $contactForm = new ContactForm();
         $form = $this->createForm(ContactFormType::class, $contactForm);
         $form->handleRequest($request);
@@ -29,10 +30,9 @@ class ContactFormController extends AbstractController
             Válaszunkkal hamarosan keresünk a megadott e-mail címen");
         }
 
-        return new Response($twig->render('dp/show.html.twig', [
+        return new Response($twig->render('/dp/show.html.twig', [
             'contact_form' => $form->createView()
         ]));
     }
-
 
 }

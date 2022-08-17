@@ -6,7 +6,8 @@ use App\Repository\ContactFormRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Config\Framework\Validation;
+use Symfony\Component\Validator\Validation;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 #[ORM\Entity(repositoryClass: ContactFormRepository::class)]
 class ContactForm
@@ -17,26 +18,18 @@ class ContactForm
     #[ORM\Column]
     private ?int $id = null;
 
-    /**
-     * @Assert\NotBlank()
-     */
-    #[ORM\Column(length: 255,nullable: true)]
-
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $name = null;
     /**
-     * @Assert\NotBlank()
      * @Assert\Email()
      */
 
-    #[ORM\Column(length: 255,nullable: true)]
-
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $email = null;
-    /**
-     * @Assert\NotBlank()
-     */
 
-    #[ORM\Column(type: Types::TEXT,nullable: true)]
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $messageText = null;
+
 
     public function getId(): ?int
     {
@@ -78,4 +71,16 @@ class ContactForm
 
         return $this;
     }
+    /**
+     * @Assert\Callback
+     */
+    public function validate(ExecutionContextInterface $context, $payload)
+    {
+        if (is_null($this->name) || is_null($this->email) || is_null($this->messageText)) {
+            $context->buildViolation('Hiba! Kérjük töltsd ki az összes mezőt!')
+                ->atPath('submit')
+                ->addViolation();
+        }
+    }
+
 }
